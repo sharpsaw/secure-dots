@@ -1,0 +1,34 @@
+checkgpg() {
+    if [ ! -e ~/.gpg-self ]; then
+        echo "No ~/.gpg-self found."
+        echo -n "What is your gpg username?: "
+        read GPG_SELF
+        export GPG_SELF
+        echo "export GPG_SELF='$GPG_SELF'" > ~/.gpg-self
+    fi
+    if [ ! -d ~/.gnupg ]; then
+        cat <<EOT
+Hoo boy. Time to generate a gpg key.
+
+Be sure to use $GPG_SELF as the user name.
+
+If it gets stuck looking for entropy, try something like:
+   find /var/ /usr /lib -type f -print0 | xargs -0 cat > /dev/null"
+EOT
+        gpg --gen-key
+    fi
+    if [ ! -e ~/.gnupg/pubkey.txt ]; then
+        if [ -z "$GPG_SELF" ]; then
+            echo "Wait. No \$GPG_SELF ? Something's odd. Re-run checkgpg ?"
+            return
+        fi
+        (
+            builtin cd ~/.gnupg &&
+                gpg --armor --output pubkey.txt --export $GPG_SELF &&
+                echo "Generated `pwd`/pubkey.txt"
+        )
+    fi
+}
+checkgpg
+
+# vim:ft=sh

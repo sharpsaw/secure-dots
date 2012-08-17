@@ -1,0 +1,11 @@
+#!/bin/sh -xe
+## Encrypt using gpg
+if [ -n "$1" ]; then
+    for=$1
+    shift
+else
+    if [ -n "$GPG_SELF" ]; then
+        echo "No arg passed and no \$GPG_SELF set. Who is this for?"
+        exit
+    fi
+fi

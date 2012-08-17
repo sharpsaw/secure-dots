@@ -1,0 +1,2 @@
+#!/bin/sh -xe
+gpg --list-keys && gpg --list-sigs
