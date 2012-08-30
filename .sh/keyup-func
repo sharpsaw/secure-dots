@@ -5,7 +5,7 @@ keyup() {
         done
         echo -e '\e[36mkeychain\e[0med.'
     else
-        echo "keychain not found (can be installed as a distro pkg or in ~/bin)"
+        ...warn "keychain not found (can be installed as a distro pkg or in ~/bin)"
     fi
 }
 # vim:ft=sh
