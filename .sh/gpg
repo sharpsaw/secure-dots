@@ -1,5 +1,7 @@
 checkgpg() {
-    if [ ! -e ~/.gpg-self ]; then
+    if [ -e ~/.gpg-self ]; then
+        source ~/.gpg-self
+    else
         echo "No ~/.gpg-self found."
         echo -n "What is your gpg username?: "
         read GPG_SELF
