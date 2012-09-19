@@ -6,6 +6,11 @@ keyup() {
         echo -e '\e[36mkeychain\e[0med.'
     else
         ...warn "keychain not found (can be installed as a distro pkg or in ~/bin)"
+        ...warn "(or, if in a hurry, try lazykeyup)"
     fi
 }
+lazykeyup() (
+    set -xe
+    eval `ssh-agent` && ssh-add
+)
 # vim:ft=sh
