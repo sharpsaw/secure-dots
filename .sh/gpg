@@ -8,7 +8,7 @@ checkgpg() {
         export GPG_SELF
         echo "export GPG_SELF='$GPG_SELF'" > ~/.gpg-self
     fi
-    if [ ! -d ~/.gnupg ]; then
+    if [ ! -d ~/.gnupg/pubring.gpg ]; then
         cat <<EOT
 Hoo boy. Time to generate a gpg key.
 
@@ -17,7 +17,7 @@ Be sure to use $GPG_SELF as the user name.
 If it gets stuck looking for entropy, try something like:
    find /var/ /usr /lib -type f -print0 | xargs -0 cat > /dev/null"
 EOT
-        gpg --gen-key
+        gpg --gen-key || echo Failure to run: gpg --gen-key
     fi
     if [ ! -e ~/.gnupg/pubkey.txt ]; then
         if [ -z "$GPG_SELF" ]; then
@@ -27,7 +27,8 @@ EOT
         (
             builtin cd ~/.gnupg &&
                 gpg --armor --output pubkey.txt --export $GPG_SELF &&
-                echo "Generated `pwd`/pubkey.txt"
+                echo "Generated `pwd`/pubkey.txt" ||
+                    echo "~/.sh/gpg failed to generate pubkey.txt"
         )
     fi
 }
